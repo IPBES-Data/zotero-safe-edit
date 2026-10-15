@@ -70,6 +70,8 @@ SafeEdit.endpoints = {
         zotero_version: Zotero.version,
         auto_sync: SafeEdit.guards.autoSync(),
         max_batch_size: SafeEdit.guards.maxBatchSize(),
+        line_batches: SafeEdit.guards.lineBatches(),
+        max_line_batch_size: SafeEdit.guards.maxLineBatchSize(),
         max_backup_age_minutes: SafeEdit.guards.maxBackupAgeMinutes(),
         allowed_fields: SafeEdit.guards.allowedFields(),
         groups,

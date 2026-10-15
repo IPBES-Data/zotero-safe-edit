@@ -13,6 +13,38 @@ SafeEdit.guards = {
     return Number(SafeEdit.util.pref("maxBatchSize")) || 25;
   },
 
+  lineBatches() {
+    return !!SafeEdit.util.pref("lineBatches");
+  },
+
+  maxLineBatchSize() {
+    return Number(SafeEdit.util.pref("maxLineBatchSize")) || 10000;
+  },
+
+  // whether a change only adds one line at the end of a field, or removes
+  // the last line (the undo of such a change)
+  lineChange(c) {
+    var added = (before, after) => {
+      if (typeof before != "string" || typeof after != "string") return false;
+      var start = before === "" ? "" : before + "\n";
+      if (!after.startsWith(start)) return false;
+      var line = after.slice(start.length);
+      return line.trim() !== "" && !line.includes("\n");
+    };
+    return !!c && (added(c.old, c.new) || added(c.new, c.old));
+  },
+
+  // a batch larger than maxBatchSize in which every change only adds or
+  // removes a line, if allowed in the settings: approved as a whole
+  isLineBatch(changes) {
+    return (
+      this.lineBatches() &&
+      Array.isArray(changes) &&
+      changes.length > this.maxBatchSize() &&
+      changes.every((c) => this.lineChange(c))
+    );
+  },
+
   maxBackupAgeMinutes() {
     return Number(SafeEdit.util.pref("maxBackupAgeMinutes")) || 60;
   },
@@ -28,7 +60,14 @@ SafeEdit.guards = {
       reasons.push("No changes given");
       return reasons;
     }
-    if (changes.length > this.maxBatchSize()) {
+    if (this.isLineBatch(changes)) {
+      if (changes.length > this.maxLineBatchSize()) {
+        reasons.push(
+          `Too many changes in one batch of added lines (${changes.length}, ` +
+            `at most ${this.maxLineBatchSize()})`
+        );
+      }
+    } else if (changes.length > this.maxBatchSize()) {
       reasons.push(
         `Too many changes in one batch (${changes.length}, at most ${this.maxBatchSize()})`
       );

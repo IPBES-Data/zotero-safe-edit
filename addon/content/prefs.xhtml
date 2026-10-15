@@ -10,6 +10,14 @@
     <html:label>Maximum number of changes per approval
       <html:input type="number" min="1" max="100" preference="extensions.safe-edit.maxBatchSize"/>
     </html:label>
+    <html:label>
+      <html:input type="checkbox" preference="extensions.safe-edit.lineBatches"/>
+      Allow large batches which only add a line at the end of a field (e.g. an ID in Extra),
+      approved as a whole with a tick box
+    </html:label>
+    <html:label>Maximum number of added lines per approval
+      <html:input type="number" min="1" max="100000" preference="extensions.safe-edit.maxLineBatchSize"/>
+    </html:label>
     <html:label>Fields which may be edited (comma separated Zotero field names, e.g. DOI, extra)
       <html:input type="text" preference="extensions.safe-edit.allowedFields"/>
     </html:label>

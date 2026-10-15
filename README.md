@@ -19,6 +19,7 @@ the wrong field, …) and want to offer one-click fixes without risking the data
 | Allowed fields | Only fields you allow in the settings can be changed (default: `DOI`), and only if the item type has that field. |
 | Expected old value | A change is only written if the field still has the value the application saw; checked when the dialog opens and again on approval. |
 | Batch limit | At most 25 changes per approval (configurable). |
+| Line batches | Off by default. If allowed in the settings, a larger batch (default: at most 10,000) is accepted when every change only adds one line at the end of a field, e.g. `OpenAlex: W…` in Extra, or removes such a line again (its undo). The plugin checks this for each change. Such a batch is shown as a compact list and approved with an "I have checked the list" tick box; progress is shown while writing. |
 | Approval | All changes of a batch are shown before → after with the differences highlighted. *Approve* is only enabled after scrolling to the end of the list. Single changes can be unticked. |
 | Log | Every change is logged before it is written, in an append-only log. |
 | Undo | Applied changes can be undone (only if the field was not changed since), through the same checks and dialog. |
@@ -89,6 +90,7 @@ Item keys always stay the same, as items are only ever edited, never replaced.
 ```sh
 ./build.sh               # builds build/zotero-safe-edit-<version>.xpi
 node tests/diff.test.js  # tests of the difference highlighting
+node tests/lines.test.js # which changes count as adding a line
 ```
 
 **Always test with a separate Zotero profile and data directory** (start Zotero

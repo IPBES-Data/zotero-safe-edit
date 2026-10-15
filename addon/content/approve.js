@@ -3,6 +3,8 @@
 
 var io = window.arguments[0];
 var reachedEnd = false;
+// batch of added (or removed) lines: compact list, approved with a tick box
+var lines = io.meta.mode === "lines";
 
 function el(tag, attrs, ...children) {
   var e = document.createElement(tag);
@@ -69,6 +71,41 @@ function row(r) {
   return el("section", { class: r.ok ? "row" : "row invalid" }, head, body);
 }
 
+// the line a change adds ("+") or removes ("−")
+function lineOf(r) {
+  var added = r.new.length > r.old.length;
+  var long = added ? r.new : r.old;
+  var short = added ? r.old : r.new;
+  return { sign: added ? "+" : "−", text: long.slice(short === "" ? 0 : short.length + 1) };
+}
+
+function lineRow(r) {
+  var box = el("input", { type: "checkbox", "data-index": String(r.index) });
+  box.checked = r.ok;
+  box.disabled = !r.ok;
+  box.addEventListener("change", update);
+  var l = lineOf(r);
+  return el(
+    "div",
+    { class: r.ok ? "line-row" : "line-row invalid" },
+    box,
+    el("span", { class: "title" }, r.title || "(item not found)"),
+    el("span", { class: l.sign === "+" ? "added" : "removed" }, `${l.sign} ${r.field}: ${l.text}`),
+    r.ok ? null : el("span", { class: "problem" }, " — cannot be applied: " + r.problem)
+  );
+}
+
+// kinds of lines, numbers replaced, e.g. "OpenAlex: W…" (5132)
+function lineSummary() {
+  var kinds = new Map();
+  for (let r of io.rows) {
+    var l = lineOf(r);
+    var k = `${l.sign} ${r.field}: ${l.text.replace(/[0-9]+/g, "…")}`;
+    kinds.set(k, (kinds.get(k) || 0) + 1);
+  }
+  return Array.from(kinds, ([k, n]) => `${k} (${n})`).join(" · ");
+}
+
 function boxes() {
   return Array.from(document.querySelectorAll("#rows input[type=checkbox]"));
 }
@@ -87,6 +124,12 @@ function update() {
   document.getElementById("counter").textContent =
     `${io.rows.length} changes · ${valid.length - selected.length} deselected · ` +
     `${io.rows.length - valid.length} cannot be applied · ${selected.length} will be saved`;
+  if (lines) {
+    document.getElementById("scroll-hint").hidden = true;
+    document.getElementById("approve").disabled =
+      !document.getElementById("confirm").checked || !selected.length;
+    return;
+  }
   document.getElementById("scroll-hint").hidden = reachedEnd;
   document.getElementById("approve").disabled = !reachedEnd || !selected.length;
 }
@@ -95,7 +138,16 @@ window.addEventListener("load", () => {
   document.getElementById("meta").textContent =
     `Requested by: ${io.meta.client} · Action: ${io.meta.action} · Batch ${io.meta.batch_id}`;
   var list = document.getElementById("rows");
-  for (let r of io.rows) list.append(row(r));
+  if (lines) {
+    document.getElementById("heading").textContent = "Approve adding lines";
+    document.getElementById("hint").textContent =
+      `Each of these ${io.rows.length} changes only adds one line at the end of a field ` +
+      `(or removes it again). Lines: ${lineSummary()}. Check the list, untick changes you ` +
+      `do not want, then tick "I have checked the list" to approve.`;
+    document.getElementById("confirm-box").hidden = false;
+    document.getElementById("confirm").addEventListener("change", update);
+  }
+  for (let r of io.rows) list.append(lines ? lineRow(r) : row(r));
   list.addEventListener("scroll", checkScroll);
   window.addEventListener("resize", checkScroll);
 

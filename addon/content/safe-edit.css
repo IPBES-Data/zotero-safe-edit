@@ -57,3 +57,11 @@ body.safe-edit-approve {
 .safe-edit-prefs .client { display: flex; gap: 8px; align-items: center; }
 .safe-edit-prefs .revoked { color: #888; text-decoration: line-through; }
 .safe-edit-prefs .token { font-family: monospace; user-select: all; }
+
+/* batch of added lines: one compact line per change */
+.safe-edit-approve .line-row { display: flex; gap: 8px; align-items: baseline; padding: 2px 4px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.2); }
+.safe-edit-approve .line-row.invalid { color: #888; }
+.safe-edit-approve .line-row .title { font-weight: normal; flex: 1; }
+.safe-edit-approve .line-row .added, .safe-edit-approve .line-row .removed { font-family: monospace; }
+.safe-edit-approve #confirm-box { margin-left: auto; }

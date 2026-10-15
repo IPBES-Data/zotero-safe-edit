@@ -51,7 +51,7 @@ SafeEdit.edits = {
     };
   },
 
-  _entry(r, { batchID, client, action, scrolled, status, reason }) {
+  _entry(r, { batchID, client, action, scrolled, lineBatch, status, reason }) {
     var c = r.change;
     return {
       type: "entry",
@@ -72,6 +72,7 @@ SafeEdit.edits = {
       status,
       reason: reason || null,
       scrolled_to_end: scrolled,
+      line_batch: !!lineBatch,
       plugin_version: SafeEdit.version,
       zotero_version: Zotero.version,
     };
@@ -88,9 +89,10 @@ SafeEdit.edits = {
     }
 
     var batchID = SafeEdit.util.newID();
+    var lineBatch = SafeEdit.guards.isLineBatch(changes);
     var decision = await SafeEdit.dialog.open(
       rows.map((r) => this._public(r)),
-      { client: client.name, action, batch_id: batchID }
+      { client: client.name, action, batch_id: batchID, mode: lineBatch ? "lines" : "changes" }
     );
     if (decision.cancelled) {
       return { status: "cancelled", batch_id: batchID };
@@ -98,8 +100,10 @@ SafeEdit.edits = {
 
     var approved = new Set(decision.approved);
     var scrolled = !!decision.scrolled_to_end;
-    var meta = { batchID, client, action, scrolled };
+    var meta = { batchID, client, action, scrolled, lineBatch };
     var results = [];
+    var progress = lineBatch ? SafeEdit.dialog.progress(approved.size) : null;
+    var written = 0;
 
     for (let r of rows) {
       var result = { index: r.index, item_key: r.change.item_key, field: r.change.field };
@@ -124,6 +128,7 @@ SafeEdit.edits = {
         continue;
       }
 
+      if (progress) progress.update(++written);
       // log first, then write, then complete the log entry
       var entry = this._entry(r, { ...meta, status: "pending" });
       await SafeEdit.log.append(r.libraryID, entry);
@@ -149,6 +154,7 @@ SafeEdit.edits = {
         results.push({ ...result, status: "failed", reason: String(e.message || e) });
       }
     }
+    if (progress) progress.close(written);
     return { status: "done", batch_id: batchID, scrolled_to_end: scrolled, results };
   },
 

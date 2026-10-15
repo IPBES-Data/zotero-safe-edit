@@ -10,7 +10,7 @@
     <header>
       <h1 id="heading">Approve changes</h1>
       <p id="meta"></p>
-      <p class="hint">
+      <p class="hint" id="hint">
         Scroll through all changes. <strong>Approve</strong> becomes available
         once the end of the list has been reached. Untick changes you do not want.
       </p>
@@ -19,6 +19,7 @@
     <footer>
       <span id="counter"></span>
       <span id="scroll-hint">Scroll to the end of the list to approve</span>
+      <label id="confirm-box" hidden="hidden"><input type="checkbox" id="confirm" /> I have checked the list</label>
       <button id="cancel">Cancel</button>
       <button id="approve" disabled="disabled">Approve selected</button>
     </footer>
