@@ -73,34 +73,36 @@ SafeEdit.guards = {
 
     var item = await SafeEdit.util.getItem(libraryID, c.item_key);
     if (!item) return fail("Item not found", { libraryID });
+
+    // the current value is reported whenever the item has the field, also
+    // when the change is refused (e.g. to see whether it was made already)
+    var fieldID = Zotero.ItemFields.getID(c.field);
+    var hasField = !!fieldID && Zotero.ItemFields.isValidForType(fieldID, item.itemTypeID);
+    var current = hasField ? item.getField(c.field) || "" : undefined;
+    var found = { libraryID, item, current };
+
     if (!Zotero.Libraries.get(libraryID).editable) {
-      return fail("You cannot edit this group", { libraryID, item });
+      return fail("You cannot edit this group", found);
     }
     if (!item.isRegularItem()) {
-      return fail("Only regular items can be edited (not notes, attachments or annotations)", { libraryID, item });
+      return fail("Only regular items can be edited (not notes, attachments or annotations)", found);
     }
-    if (item.deleted) return fail("Item is in the trash", { libraryID, item });
+    if (item.deleted) return fail("Item is in the trash", found);
 
     if (!this.allowedFields().includes(c.field)) {
-      return fail(`Field "${c.field}" is not allowed (Settings → Safe Edit)`, { libraryID, item });
+      return fail(`Field "${c.field}" is not allowed (Settings → Safe Edit)`, found);
     }
-    var fieldID = Zotero.ItemFields.getID(c.field);
-    if (!fieldID) return fail(`Unknown field "${c.field}"`, { libraryID, item });
-    if (!Zotero.ItemFields.isValidForType(fieldID, item.itemTypeID)) {
+    if (!fieldID) return fail(`Unknown field "${c.field}"`, found);
+    if (!hasField) {
       return fail(
         `Item type "${Zotero.ItemTypes.getName(item.itemTypeID)}" has no field "${c.field}"`,
-        { libraryID, item }
+        found
       );
     }
 
-    var current = item.getField(c.field) || "";
     if (current !== c.old) {
-      return fail("The current value differs from the expected old value (item changed since)", {
-        libraryID,
-        item,
-        current,
-      });
+      return fail("The current value differs from the expected old value (item changed since)", found);
     }
-    return { ok: true, reason: null, libraryID, item, current };
+    return { ok: true, reason: null, ...found };
   },
 };
