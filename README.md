@@ -114,3 +114,7 @@ SAFE_EDIT_TOKEN=… TEST_GROUP=… TEST_ITEM=… tests/guard-tests.sh
 - Undo restores the old value; blocked after a manual edit of the field.
 - Restore from snapshot: values back, item keys unchanged.
 - Revoked token → refused. Plugin disabled and enabled again → works, no errors.
+
+## Licence
+
+MIT, see [LICENSE](LICENSE).
