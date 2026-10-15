@@ -71,7 +71,7 @@ SafeEdit.guards = {
     var libraryID = SafeEdit.util.libraryID(c.group_id);
     if (!libraryID) return fail(`Group ${c.group_id} is not in this Zotero`);
 
-    var item = await Zotero.Items.getByLibraryAndKeyAsync(libraryID, String(c.item_key));
+    var item = await SafeEdit.util.getItem(libraryID, c.item_key);
     if (!item) return fail("Item not found", { libraryID });
     if (!Zotero.Libraries.get(libraryID).editable) {
       return fail("You cannot edit this group", { libraryID, item });

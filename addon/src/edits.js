@@ -169,7 +169,7 @@ SafeEdit.edits = {
       if (e.status !== "applied") {
         continue;
       }
-      var item = await Zotero.Items.getByLibraryAndKeyAsync(libraryID, e.item_key);
+      var item = await SafeEdit.util.getItem(libraryID, e.item_key);
       if (!item) {
         e.state = "item not found";
         continue;
@@ -228,7 +228,7 @@ SafeEdit.edits = {
       if (["note", "attachment", "annotation"].includes(snap.itemType)) {
         continue;
       }
-      var item = await Zotero.Items.getByLibraryAndKeyAsync(libraryID, snap.key);
+      var item = await SafeEdit.util.getItem(libraryID, snap.key);
       if (!item) {
         missing.push(snap.key);
         continue;

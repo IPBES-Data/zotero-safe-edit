@@ -47,6 +47,15 @@ SafeEdit.util = {
     return id || null;
   },
 
+  // item with all its data loaded (Zotero loads item data on demand), or null
+  async getItem(libraryID, key) {
+    var item = await Zotero.Items.getByLibraryAndKeyAsync(libraryID, String(key));
+    if (item && item.loadAllData) {
+      await item.loadAllData();
+    }
+    return item || null;
+  },
+
   groupName(groupID) {
     var group = Zotero.Groups.get(Number(groupID));
     return group ? group.name : String(groupID);
