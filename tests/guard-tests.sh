@@ -44,8 +44,10 @@ check "valid token is accepted" "HTTP200" "$(post status '{}' -H "$auth")"
 
 check "field not in allow-list is rejected" "is not allowed" \
   "$(post preview "{\"changes\":[$(change title x y)]}" -H "$auth")"
-check "unknown item is rejected" "Item not found" \
-  "$(post preview "{\"changes\":[{\"group_id\":$TEST_GROUP,\"item_key\":\"ZZZZZZZZ\",\"field\":\"DOI\",\"old\":\"\",\"new\":\"10.1/x\"}]}" -H "$auth")"
+# JSON with {…,…} in a variable: as a direct argument the shell would expand
+# it as a brace pattern
+unknown='{"changes":[{"group_id":'"$TEST_GROUP"',"item_key":"ZZZZZZZZ","field":"DOI","old":"","new":"10.1/x"}]}'
+check "unknown item is rejected" "Item not found" "$(post preview "$unknown" -H "$auth")"
 check "wrong old value is rejected" "differs from the expected old value" \
   "$(post preview "{\"changes\":[$(change DOI 'not-the-current-value' '10.1/x')]}" -H "$auth")"
 check "unchanged value is rejected" "are the same" \
