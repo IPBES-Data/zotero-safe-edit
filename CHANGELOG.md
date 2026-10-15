@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.8
+
+- Settings: the list of applications is updated while the settings are open,
+  e.g. when an application registers itself.
+
+## 0.1.7
+
+- Settings: the list of applications (with *Revoke*) is shown again; Zotero
+  does not call `onload` of plugin settings panes.
+- Settings: the field for the allowed fields uses the full width.
+
 ## 0.1.6
 
 - Line batches only for the Extra field. Filling an empty field (e.g. many

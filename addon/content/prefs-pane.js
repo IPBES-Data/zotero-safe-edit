@@ -1,8 +1,18 @@
-/* global Zotero, document */
+/* global Zotero, document, window */
 
 var SafeEditPrefs = {
   init() {
     this.render();
+    // redraw when the list changes while the settings are open, e.g. when an
+    // application registers itself
+    if (!this._observer) {
+      this._observer = Zotero.Prefs.registerObserver(
+        "extensions.safe-edit.clients",
+        () => this.render(),
+        true
+      );
+      window.addEventListener("unload", () => Zotero.Prefs.unregisterObserver(this._observer));
+    }
   },
 
   render() {
@@ -49,3 +59,14 @@ var SafeEditPrefs = {
     this.render();
   },
 };
+
+// Zotero does not call onload of a settings pane added by a plugin: draw the
+// list once the pane is in the window.
+// ponytail: polls for up to 10 s; a "showing" event listener if Zotero adds one
+(function draw(tries) {
+  if (document.getElementById("safe-edit-clients")) {
+    SafeEditPrefs.init();
+  } else if (tries > 0) {
+    setTimeout(() => draw(tries - 1), 200);
+  }
+})(50);
