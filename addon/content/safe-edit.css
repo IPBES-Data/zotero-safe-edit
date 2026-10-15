@@ -65,3 +65,6 @@ body.safe-edit-approve {
 .safe-edit-approve .line-row .title { font-weight: normal; flex: 1; }
 .safe-edit-approve .line-row .added, .safe-edit-approve .line-row .removed { font-family: monospace; }
 .safe-edit-approve #confirm-box { margin-left: auto; }
+
+/* settings: the list of allowed fields in full */
+.safe-edit-prefs input[type="text"] { width: 100%; box-sizing: border-box; }

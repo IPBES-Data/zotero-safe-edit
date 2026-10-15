@@ -21,9 +21,11 @@ SafeEdit.guards = {
     return Number(SafeEdit.util.pref("maxLineBatchSize")) || 10000;
   },
 
-  // whether a change only adds one line at the end of a field, or removes
-  // the last line (the undo of such a change)
+  // whether a change only adds one line at the end of the Extra field, or
+  // removes the last line (the undo of such a change). Only Extra: in other
+  // fields, filling an empty field would count as adding a line.
   lineChange(c) {
+    if (!c || c.field !== "extra") return false;
     var added = (before, after) => {
       if (typeof before != "string" || typeof after != "string") return false;
       var start = before === "" ? "" : before + "\n";
@@ -31,7 +33,7 @@ SafeEdit.guards = {
       var line = after.slice(start.length);
       return line.trim() !== "" && !line.includes("\n");
     };
-    return !!c && (added(c.old, c.new) || added(c.new, c.old));
+    return added(c.old, c.new) || added(c.new, c.old);
   },
 
   // a batch larger than maxBatchSize in which every change only adds or
