@@ -55,6 +55,20 @@ many=$(i=0; s=""; while [ $i -lt 30 ]; do s="$s$(change DOI '' "10.1/$i"),"; i=$
 check "batch larger than the limit is refused" "Too many changes" \
   "$(post apply "{\"changes\":[$many]}" -H "$auth")"
 
+# line batches (Extra only), checked with preview so that no dialog opens
+lines=$(i=0; s=""; while [ $i -lt 30 ]; do s="$s$(change extra '' "OpenAlex: W$i"),"; i=$((i+1)); done; echo "${s%,}")
+out=$(post preview "{\"changes\":[$lines]}" -H "$auth")
+if post status '{}' -H "$auth" | grep -q '"line_batches":true'; then
+  case "$out" in
+    *"Too many changes"*) check "30 added Extra lines accepted (line batches on)" "no batch limit" "$out" ;;
+    *) echo "PASS  30 added Extra lines accepted (line batches on)" ;;
+  esac
+else
+  check "30 added Extra lines refused (line batches off)" "Too many changes" "$out"
+fi
+check "30 filled DOI fields refused, also with line batches" "Too many changes" \
+  "$(post preview "{\"changes\":[$many]}" -H "$auth")"
+
 check "group which is not in Zotero is rejected" "is not in this Zotero" \
   "$(post preview '{"changes":[{"group_id":1,"item_key":"AAAAAAAA","field":"DOI","old":"","new":"10.1/x"}]}' -H "$auth")"
 

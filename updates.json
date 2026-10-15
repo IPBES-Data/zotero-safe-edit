@@ -3,9 +3,9 @@
     "safe-edit@ipbes-data": {
       "updates": [
         {
-          "version": "0.1.5",
-          "update_link": "https://github.com/IPBES-Data/zotero-safe-edit/releases/download/v0.1.5/zotero-safe-edit-0.1.5.xpi",
-          "update_hash": "sha256:TO_BE_FILLED_AT_RELEASE",
+          "version": "0.1.6",
+          "update_link": "https://github.com/IPBES-Data/zotero-safe-edit/releases/download/v0.1.6/zotero-safe-edit-0.1.6.xpi",
+          "update_hash": "sha256:632539e55958878e669af456bdf7016dd2e42e1bb13727a4962cb122eff56ffa",
           "applications": {
             "zotero": {
               "strict_min_version": "10.0",

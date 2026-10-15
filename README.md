@@ -19,7 +19,7 @@ the wrong field, …) and want to offer one-click fixes without risking the data
 | Allowed fields | Only fields you allow in the settings can be changed (default: `DOI`), and only if the item type has that field. |
 | Expected old value | A change is only written if the field still has the value the application saw; checked when the dialog opens and again on approval. |
 | Batch limit | At most 25 changes per approval (configurable). |
-| Line batches | Off by default. If allowed in the settings, a larger batch (default: at most 10,000) is accepted when every change only adds one line at the end of a field, e.g. `OpenAlex: W…` in Extra, or removes such a line again (its undo). The plugin checks this for each change. Such a batch is shown as a compact list and approved with an "I have checked the list" tick box; progress is shown while writing. |
+| Line batches | Off by default. If allowed in the settings, a larger batch (default: at most 10,000) is accepted when every change only adds one line at the end of the Extra field, e.g. `OpenAlex: W…`, or removes such a line again (its undo). Only Extra: in other fields, filling an empty field would count as adding a line. The plugin checks this for each change. Such a batch is shown as a compact list and approved with an "I have checked the list" tick box; progress is shown while writing. |
 | Approval | All changes of a batch are shown before → after with the differences highlighted. *Approve* is only enabled after scrolling to the end of the list. Single changes can be unticked. |
 | Log | Every change is logged before it is written, in an append-only log. |
 | Undo | Applied changes can be undone (only if the field was not changed since), through the same checks and dialog. |
@@ -114,6 +114,24 @@ SAFE_EDIT_TOKEN=… TEST_GROUP=… TEST_ITEM=… tests/guard-tests.sh
 - Undo restores the old value; blocked after a manual edit of the field.
 - Restore from snapshot: values back, item keys unchanged.
 - Revoked token → refused. Plugin disabled and enabled again → works, no errors.
+- Line batches on: more than 25 added Extra lines → compact dialog, *Approve*
+  only after "I have checked the list"; progress while writing; undo of the
+  whole batch in one approval. Line batches off → refused as too many.
+
+## Release
+
+Development happens on `dev`; `main` holds released versions.
+
+1. On `dev`: set the version in `addon/manifest.json` and `updates.json`
+   (version and file name in `update_link`), add it to `CHANGELOG.md`.
+2. `node tests/diff.test.js && node tests/lines.test.js`, then the guard and
+   manual tests in a test profile.
+3. `./build.sh` — builds the `.xpi` and writes its hash into `updates.json`.
+4. Commit, merge `dev` into `main`, tag `v<version>`, push both and the tag.
+5. Create the GitHub release `v<version>` with exactly this
+   `build/zotero-safe-edit-<version>.xpi` (Zotero checks the hash).
+
+Installed copies find new versions through `updates.json` on `main`.
 
 ## Licence
 
