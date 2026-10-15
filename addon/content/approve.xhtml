@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" style="background-color: Canvas; color: CanvasText; color-scheme: light dark;">
+  <head>
+    <meta charset="utf-8" />
+    <title>Safe Edit — approve changes</title>
+    <link rel="stylesheet" href="chrome://safe-edit/content/safe-edit.css" />
+    <script src="chrome://safe-edit/content/approve.js" />
+  </head>
+  <body class="safe-edit-approve">
+    <header>
+      <h1 id="heading">Approve changes</h1>
+      <p id="meta"></p>
+      <p class="hint">
+        Scroll through all changes. <strong>Approve</strong> becomes available
+        once the end of the list has been reached. Untick changes you do not want.
+      </p>
+    </header>
+    <main id="rows"></main>
+    <footer>
+      <span id="counter"></span>
+      <span id="scroll-hint">Scroll to the end of the list to approve</span>
+      <button id="cancel">Cancel</button>
+      <button id="approve" disabled="disabled">Approve selected</button>
+    </footer>
+  </body>
+</html>

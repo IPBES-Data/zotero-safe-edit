@@ -1,0 +1,784 @@
+[
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article A: DOI as doi.org link in URL",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.a",
+    "id": "safe-edit-test-1"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article B: DOI in a publisher URL",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://onlinelibrary.wiley.com/doi/10.5555/safe-edit.b",
+    "id": "safe-edit-test-2"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article C: DOI only in Extra",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "note": "Published version: https://doi.org/10.5555/safe-edit.c",
+    "id": "safe-edit-test-3"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article D: different DOIs in URL and Extra (not proposed)",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.d1",
+    "note": "Published version: https://doi.org/10.5555/safe-edit.d2",
+    "id": "safe-edit-test-4"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article E: already has a DOI (nothing to do)",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "DOI": "10.1038/s41558-020-00952-0",
+    "id": "safe-edit-test-5"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article F: a very long title to check that long values wrap and are shown in full in the approval dialog and in the app, without any truncation, horizontal scrolling or hidden parts, even when the window is narrow and the text continues for several lines",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.f",
+    "id": "safe-edit-test-6"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article G: look–alike characters in the title “quotes”",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.g",
+    "id": "safe-edit-test-7"
+  },
+  {
+    "type": "report",
+    "title": "Safe Edit test report H: DOI in Extra",
+    "publisher": "Test Institute",
+    "issued": {
+      "date-parts": [
+        [
+          2023
+        ]
+      ]
+    },
+    "note": "Published version: https://doi.org/10.5555/safe-edit.h",
+    "id": "safe-edit-test-8"
+  },
+  {
+    "type": "book",
+    "title": "Safe Edit test book I: DOI in Extra",
+    "publisher": "Test Press",
+    "issued": {
+      "date-parts": [
+        [
+          2022
+        ]
+      ]
+    },
+    "note": "Published version: https://doi.org/10.5555/safe-edit.i",
+    "id": "safe-edit-test-9"
+  },
+  {
+    "type": "webpage",
+    "title": "Safe Edit test web page J: DOI in URL",
+    "URL": "https://doi.org/10.5555/safe-edit.j",
+    "issued": {
+      "date-parts": [
+        [
+          2025
+        ]
+      ]
+    },
+    "id": "safe-edit-test-10"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K1: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k1",
+    "id": "safe-edit-test-11"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K2: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k2",
+    "id": "safe-edit-test-12"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K3: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k3",
+    "id": "safe-edit-test-13"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K4: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k4",
+    "id": "safe-edit-test-14"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K5: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k5",
+    "id": "safe-edit-test-15"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K6: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k6",
+    "id": "safe-edit-test-16"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K7: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k7",
+    "id": "safe-edit-test-17"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K8: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k8",
+    "id": "safe-edit-test-18"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K9: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k9",
+    "id": "safe-edit-test-19"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K10: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k10",
+    "id": "safe-edit-test-20"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K11: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k11",
+    "id": "safe-edit-test-21"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K12: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k12",
+    "id": "safe-edit-test-22"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K13: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k13",
+    "id": "safe-edit-test-23"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K14: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k14",
+    "id": "safe-edit-test-24"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K15: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k15",
+    "id": "safe-edit-test-25"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K16: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k16",
+    "id": "safe-edit-test-26"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K17: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k17",
+    "id": "safe-edit-test-27"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K18: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k18",
+    "id": "safe-edit-test-28"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K19: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k19",
+    "id": "safe-edit-test-29"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K20: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k20",
+    "id": "safe-edit-test-30"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K21: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k21",
+    "id": "safe-edit-test-31"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K22: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k22",
+    "id": "safe-edit-test-32"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K23: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k23",
+    "id": "safe-edit-test-33"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K24: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k24",
+    "id": "safe-edit-test-34"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K25: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k25",
+    "id": "safe-edit-test-35"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K26: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k26",
+    "id": "safe-edit-test-36"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K27: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k27",
+    "id": "safe-edit-test-37"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K28: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k28",
+    "id": "safe-edit-test-38"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K29: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k29",
+    "id": "safe-edit-test-39"
+  },
+  {
+    "type": "article-journal",
+    "title": "Safe Edit test article K30: batch test",
+    "container-title": "Journal of Test Data",
+    "author": [
+      {
+        "family": "Tester",
+        "given": "Ada"
+      }
+    ],
+    "issued": {
+      "date-parts": [
+        [
+          2024
+        ]
+      ]
+    },
+    "URL": "https://doi.org/10.5555/safe-edit.k30",
+    "id": "safe-edit-test-40"
+  }
+]

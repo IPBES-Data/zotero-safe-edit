@@ -1,0 +1,59 @@
+/* approval dialog: chrome windows are transparent unless given a background */
+:root:has(body.safe-edit-approve),
+body.safe-edit-approve {
+  color-scheme: light dark;
+  background-color: Canvas;
+  color: CanvasText;
+}
+body.safe-edit-approve {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font: menu;
+  font-size: 13px;
+}
+.safe-edit-approve header,
+.safe-edit-approve footer {
+  padding: 8px 14px;
+  flex: none;
+  background-color: Canvas;
+}
+.safe-edit-approve h1 { font-size: 16px; margin: 0 0 4px; }
+.safe-edit-approve .hint { color: #555; margin: 4px 0 0; }
+.safe-edit-approve #rows {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  padding: 0 14px;
+}
+.safe-edit-approve .row { padding: 10px 0; border-bottom: 1px solid #e5e5e5; }
+.safe-edit-approve .row.invalid { color: #888; }
+.safe-edit-approve .row-head { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.safe-edit-approve .title { font-weight: bold; }
+.safe-edit-approve .meta { color: #666; }
+.safe-edit-approve .row-body { margin-left: 26px; }
+.safe-edit-approve .label { font-size: 11px; color: #666; margin-top: 4px; }
+.safe-edit-approve .value {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-family: monospace;
+  padding: 2px 4px;
+  background: color-mix(in srgb, CanvasText 7%, Canvas);
+}
+.safe-edit-approve .removed { background: #ffd7d5; color: #1a1a1a; text-decoration: line-through; }
+.safe-edit-approve .added { background: #ccf0d4; color: #1a1a1a; }
+.safe-edit-approve .empty { color: #999; font-style: italic; }
+.safe-edit-approve .why,
+.safe-edit-approve .notes { color: #555; font-size: 12px; margin-top: 4px; }
+.safe-edit-approve .problem { color: #b00020; margin-top: 4px; }
+.safe-edit-approve footer { display: flex; gap: 12px; align-items: center; justify-content: flex-end; }
+.safe-edit-approve #counter { margin-right: auto; color: #333; }
+.safe-edit-approve #scroll-hint { color: #b26a00; }
+
+/* settings pane */
+.safe-edit-prefs .client { display: flex; gap: 8px; align-items: center; }
+.safe-edit-prefs .revoked { color: #888; text-decoration: line-through; }
+.safe-edit-prefs .token { font-family: monospace; user-select: all; }

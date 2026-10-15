@@ -1,0 +1,29 @@
+<vbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      class="safe-edit-prefs"
+      onload="SafeEditPrefs.init()">
+  <groupbox>
+    <label><html:h2>Safeguards</html:h2></label>
+    <html:label>Maximum age of the group backup before editing (minutes)
+      <html:input type="number" min="1" preference="extensions.safe-edit.maxBackupAgeMinutes"/>
+    </html:label>
+    <html:label>Maximum number of changes per approval
+      <html:input type="number" min="1" max="100" preference="extensions.safe-edit.maxBatchSize"/>
+    </html:label>
+    <html:label>Fields which may be edited (comma separated Zotero field names, e.g. DOI, extra)
+      <html:input type="text" preference="extensions.safe-edit.allowedFields"/>
+    </html:label>
+    <html:p>Editing is always refused while automatic sync is on.</html:p>
+  </groupbox>
+
+  <groupbox>
+    <label><html:h2>Applications</html:h2></label>
+    <html:p>Applications which may propose edits. Every edit still has to be approved here in Zotero.</html:p>
+    <html:div id="safe-edit-clients"></html:div>
+    <hbox>
+      <html:input type="text" id="safe-edit-new-client" placeholder="Name of the application"/>
+      <button label="Add application" oncommand="SafeEditPrefs.add()"/>
+    </hbox>
+    <html:p id="safe-edit-token" class="token"></html:p>
+  </groupbox>
+</vbox>

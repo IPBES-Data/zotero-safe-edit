@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "Zotero Safe Edit",
+  "version": "0.1.2",
+  "description": "Lets local applications propose edits to Zotero items, which are applied only after approval in Zotero, with backups, a change log and undo.",
+  "author": "Rainer M. Krug",
+  "applications": {
+    "zotero": {
+      "id": "safe-edit@ipbes-data",
+      "update_url": "https://raw.githubusercontent.com/IPBES-Data/zotero-safe-edit/main/updates.json",
+      "strict_min_version": "10.0",
+      "strict_max_version": "10.0.*"
+    }
+  }
+}
