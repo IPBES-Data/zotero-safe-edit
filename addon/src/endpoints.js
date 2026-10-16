@@ -44,39 +44,7 @@ SafeEdit.endpoints = {
       { auth: false }
     );
 
-    this._define("status", async (body, client) => {
-      var groups = [];
-      for (let groupID of body.group_ids || []) {
-        var libraryID = SafeEdit.util.libraryID(groupID);
-        var last = libraryID ? await SafeEdit.backup.latest(libraryID) : null;
-        groups.push({
-          group_id: Number(groupID),
-          name: libraryID ? SafeEdit.util.groupName(groupID) : null,
-          in_zotero: !!libraryID,
-          editable: libraryID ? Zotero.Libraries.get(libraryID).editable : false,
-          last_backup: last ? last.created : null,
-          backup_age_minutes: libraryID ? await SafeEdit.backup.ageMinutes(libraryID) : null,
-          // all snapshots, newest first, e.g. to choose one for a restore
-          backups: libraryID
-            ? (await SafeEdit.backup.list(libraryID))
-                .reverse()
-                .map((b) => ({ name: b.name, created: b.created }))
-            : [],
-        });
-      }
-      return {
-        client: client.name,
-        plugin_version: SafeEdit.version,
-        zotero_version: Zotero.version,
-        auto_sync: SafeEdit.guards.autoSync(),
-        max_batch_size: SafeEdit.guards.maxBatchSize(),
-        line_batches: SafeEdit.guards.lineBatches(),
-        max_line_batch_size: SafeEdit.guards.maxLineBatchSize(),
-        max_backup_age_minutes: SafeEdit.guards.maxBackupAgeMinutes(),
-        allowed_fields: SafeEdit.guards.allowedFields(),
-        groups,
-      };
-    });
+    this._define("status", async (body, client) => E.status(client, body.group_ids || []));
 
     this._define("backup", async (body) => SafeEdit.backup.create(body.group_id));
 

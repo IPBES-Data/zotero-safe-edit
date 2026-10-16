@@ -26,7 +26,7 @@ the wrong field, …) and want to offer one-click fixes without risking the data
 
 ## Install
 
-1. Download `zotero-safe-edit-<version>.xpi` from the releases.
+1. Download `zotero-safe-edit.xpi` from the [report website](https://ipbes-data.github.io/IPBES.LiteratureReport/) (section *Zotero plugins*).
 2. Zotero → Tools → Plugins → gear icon → *Install Plugin From File…*
 3. Settings → Safe Edit: check the limits and allowed fields, add an application
    and copy its token into the application.
@@ -59,6 +59,27 @@ user.
 The `apply` and `undo` requests only return after the user has closed the
 approval dialog — use a long timeout.
 
+### From another Zotero plugin
+
+Other plugins use the same functions directly, without the network:
+
+```js
+var safeEdit = await Zotero.SafeEdit.api.connect({ pluginID: "my-plugin@example.org", name: "My plugin" });
+await safeEdit.status([groupID]);
+await safeEdit.preview(changes);
+await safeEdit.apply(changes);            // or apply(changes, "restore")
+await safeEdit.log(groupID);
+await safeEdit.undo(groupID, entryIDs);
+await safeEdit.restore(groupID, snapshot);
+await safeEdit.backup(groupID);
+```
+
+The first `connect` asks the user whether the plugin may propose edits; the
+plugin is then listed (and can be revoked) in Settings → Safe Edit. Every
+change goes through the same checks, approval dialog and log as for
+applications using the endpoints. An example is
+[Zotero Fix Proposals](https://github.com/IPBES-Data/zotero-fix-proposals).
+
 ## Files
 
 In the Zotero data directory, folder `safe-edit/`:
@@ -88,10 +109,17 @@ Item keys always stay the same, as items are only ever edited, never replaced.
 ## Development
 
 ```sh
-./build.sh               # builds build/zotero-safe-edit-<version>.xpi
+./build.sh               # builds build/zotero-safe-edit-<version>.xpi (for testing)
 node tests/diff.test.js  # tests of the difference highlighting
 node tests/lines.test.js # which changes count as adding a line
+tests/zotero/run.sh      # tests inside Zotero (separate test profile, see below)
 ```
+
+`tests/zotero/run.sh` starts a second Zotero with its own temporary profile,
+data directory (`build/test-profile`) and local server port, loads Safe Edit
+from `addon/` and runs `tests/zotero/*.test.js` inside it (a local test group,
+the approval dialog answered by the tests). A Zotero which is already running,
+and its data, are not touched. Zotero opens briefly and quits by itself.
 
 **Always test with a separate Zotero profile and data directory** (start Zotero
 with `-P` to open the profile manager), with a test group — never with your real
@@ -120,18 +148,20 @@ SAFE_EDIT_TOKEN=… TEST_GROUP=… TEST_ITEM=… tests/guard-tests.sh
 
 ## Release
 
-Development happens on `dev`; `main` holds released versions.
+Development happens on `dev`; `main` holds released versions. The plugin is
+published on the website of the [IPBES Literature Report](https://ipbes-data.github.io/IPBES.LiteratureReport/), which
+has it as a submodule (`plugins/zotero-safe-edit`):
 
-1. On `dev`: set the version in `addon/manifest.json` and `updates.json`
-   (version and file name in `update_link`), add it to `CHANGELOG.md`.
-2. `node tests/diff.test.js && node tests/lines.test.js`, then the guard and
-   manual tests in a test profile.
-3. `./build.sh` — builds the `.xpi` and writes its hash into `updates.json`.
-4. Commit, merge `dev` into `main`, tag `v<version>`, push both and the tag.
-5. Create the GitHub release `v<version>` with exactly this
-   `build/zotero-safe-edit-<version>.xpi` (Zotero checks the hash).
+1. On `dev`: set the version in `addon/manifest.json`, add it to `CHANGELOG.md`.
+2. Run the tests (see Development).
+3. Merge `dev` into `main`, tag `v<version>`, push `main`, `dev` and the tag.
+4. In IPBES.LiteratureReport: update the submodule to the tag
+   (`git -C plugins/zotero-safe-edit fetch --tags && git -C plugins/zotero-safe-edit checkout v<version>`),
+   run the pipeline (`targets::tar_make()`), which builds the `.xpi` and
+   `updates.json` into `output/report/plugins/zotero-safe-edit/`, commit and push.
 
-Installed copies find new versions through `updates.json` on `main`.
+Installed copies find the new version through `updates.json` on the website
+(the `update_url` in `addon/manifest.json`) and update themselves.
 
 ## Licence
 

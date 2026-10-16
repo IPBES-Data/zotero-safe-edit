@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.2.1
+
+- Downloads and updates through the IPBES Literature Report website.
+- Restore: the changes say which backup they restore by its date and time, not
+  its file name.
+
+## 0.2.0
+
+- Direct interface for other Zotero plugins, `Zotero.SafeEdit.api`: the same
+  checks, approval dialog and log as the endpoints. The user allows a plugin
+  once; it is listed (and can be revoked) in Settings → Safe Edit.
+- Tests inside Zotero: `tests/zotero/run.sh` starts a separate Zotero with
+  its own test profile and runs `tests/zotero/*.test.js` in it.
+
 ## 0.1.8
 
 - Settings: the list of applications is updated while the settings are open,

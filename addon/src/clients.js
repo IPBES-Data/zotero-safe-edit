@@ -66,42 +66,86 @@ SafeEdit.clients = {
     return this._load().map(({ hash, ...c }) => c);
   },
 
+  // client for another Zotero plugin (direct interface), or null if unknown
+  // or revoked
+  forPlugin(pluginID) {
+    return this._load().find((c) => c.plugin === pluginID && !c.revoked) || null;
+  },
+
   // client for a token, or null if unknown or revoked
   authenticate(token) {
     if (!token || typeof token != "string") {
       return null;
     }
     var hash = this._hash(token);
-    return this._load().find((c) => c.hash === hash && !c.revoked) || null;
+    return this._load().find((c) => c.hash && c.hash === hash && !c.revoked) || null;
   },
 
   // registration requested by an application: the user has to confirm it
   _registrations: [],
 
-  requestRegistration(name) {
-    // at most 5 confirmation dialogs per minute
+  // at most 5 confirmation dialogs per minute
+  _tooMany() {
     var now = Date.now();
     this._registrations = this._registrations.filter((t) => now - t < 60000);
     if (this._registrations.length >= 5) {
-      return { error: "Too many registration requests, try again in a minute" };
+      return true;
     }
     this._registrations.push(now);
+    return false;
+  },
 
-    name = String(name || "").trim();
-    if (!name) {
-      return { error: "A client needs a name" };
-    }
-    var ok = Services.prompt.confirm(
+  // asks the user (replaced in tests)
+  _confirm(name, kind) {
+    return Services.prompt.confirm(
       Zotero.getMainWindow(),
       "Safe Edit: new application",
-      `The application "${name}" asks for permission to propose edits to your ` +
+      `The ${kind} "${name}" asks for permission to propose edits to your ` +
         "Zotero items.\n\nEvery edit still has to be approved by you in Zotero. " +
         "You can revoke this permission at any time in Settings → Safe Edit.\n\n" +
         "Allow?"
     );
-    if (!ok) {
+  },
+
+  requestRegistration(name) {
+    if (this._tooMany()) {
+      return { error: "Too many registration requests, try again in a minute" };
+    }
+    name = String(name || "").trim();
+    if (!name) {
+      return { error: "A client needs a name" };
+    }
+    if (!this._confirm(name, "application")) {
       return { denied: true };
     }
     return { name, token: this.add(name) };
+  },
+
+  // registration of another Zotero plugin for the direct interface; returns
+  // the client, or null if the user did not allow it
+  requestPluginRegistration(pluginID, name) {
+    pluginID = String(pluginID || "").trim();
+    name = String(name || "").trim() || pluginID;
+    if (!pluginID) {
+      throw new Error("A plugin needs its ID");
+    }
+    if (this._tooMany()) {
+      throw new Error("Too many registration requests, try again in a minute");
+    }
+    if (!this._confirm(name, "Zotero plugin")) {
+      return null;
+    }
+    var list = this._load();
+    var client = {
+      id: SafeEdit.util.newID(),
+      name,
+      plugin: pluginID,
+      hash: null,
+      created: SafeEdit.util.now(),
+      revoked: null,
+    };
+    list.push(client);
+    this._save(list);
+    return client;
   },
 };
