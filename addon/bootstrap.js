@@ -18,6 +18,7 @@ var MODULES = [
   "guards",
   "dialog",
   "edits",
+  "api",
   "endpoints",
 ];
 
@@ -51,7 +52,7 @@ async function startup({ id, version, rootURI }) {
       PathUtils: paths,
     });
   }
-  // for the settings pane
+  // for the settings pane and other plugins (SafeEdit.api)
   Zotero.SafeEdit = SafeEdit;
 
   SafeEdit.endpoints.register();

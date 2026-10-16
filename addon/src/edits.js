@@ -3,6 +3,41 @@
 // Checks a batch of changes, asks for approval and writes the approved ones.
 // Used for edits, undos and restores alike.
 SafeEdit.edits = {
+  // versions, settings and the state of the given groups
+  async status(client, groupIDs) {
+    var groups = [];
+    for (let groupID of groupIDs || []) {
+      var libraryID = SafeEdit.util.libraryID(groupID);
+      var last = libraryID ? await SafeEdit.backup.latest(libraryID) : null;
+      groups.push({
+        group_id: Number(groupID),
+        name: libraryID ? SafeEdit.util.groupName(groupID) : null,
+        in_zotero: !!libraryID,
+        editable: libraryID ? Zotero.Libraries.get(libraryID).editable : false,
+        last_backup: last ? last.created : null,
+        backup_age_minutes: libraryID ? await SafeEdit.backup.ageMinutes(libraryID) : null,
+        // all snapshots, newest first, e.g. to choose one for a restore
+        backups: libraryID
+          ? (await SafeEdit.backup.list(libraryID))
+              .reverse()
+              .map((b) => ({ name: b.name, created: b.created }))
+          : [],
+      });
+    }
+    return {
+      client: client.name,
+      plugin_version: SafeEdit.version,
+      zotero_version: Zotero.version,
+      auto_sync: SafeEdit.guards.autoSync(),
+      max_batch_size: SafeEdit.guards.maxBatchSize(),
+      line_batches: SafeEdit.guards.lineBatches(),
+      max_line_batch_size: SafeEdit.guards.maxLineBatchSize(),
+      max_backup_age_minutes: SafeEdit.guards.maxBackupAgeMinutes(),
+      allowed_fields: SafeEdit.guards.allowedFields(),
+      groups,
+    };
+  },
+
   // preview: checks and diffs, nothing is written
   async preview(changes) {
     var blockers = await SafeEdit.guards.batch(changes);
@@ -226,6 +261,9 @@ SafeEdit.edits = {
       throw new Error(`Group ${groupID} is not in this Zotero`);
     }
     var { name, data } = await SafeEdit.backup.load(libraryID, snapshotName);
+    // the backup's date and time, as the user sees them elsewhere
+    var created = SafeEdit.backup._timeFromName(name);
+    var restoreReason = "Restore from the backup of " + (created ? new Date(created).toLocaleString() : name);
     var allowed = SafeEdit.guards.allowedFields();
     var changes = [];
     var notRestored = [];
@@ -260,7 +298,7 @@ SafeEdit.edits = {
             field,
             old: now,
             new: before,
-            reason: "Restore from snapshot " + name,
+            reason: restoreReason,
           });
         } else {
           notRestored.push({ item_key: snap.key, field, snapshot: before, current: now });

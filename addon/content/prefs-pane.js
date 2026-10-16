@@ -28,7 +28,7 @@ var SafeEditPrefs = {
       line.className = "client" + (c.revoked ? " revoked" : "");
       line.append(
         document.createTextNode(
-          `${c.name} — added ${c.created.slice(0, 10)}` +
+          `${c.name}${c.plugin ? " (Zotero plugin)" : ""} — added ${c.created.slice(0, 10)}` +
             (c.revoked ? `, revoked ${c.revoked.slice(0, 10)}` : "")
         )
       );
