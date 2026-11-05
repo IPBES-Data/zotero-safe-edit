@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.2
+
+- Works with all Zotero 10 releases (10.0 or newer 10.x), not only 10.0.x:
+  Zotero would otherwise disable the plugin at its next minor release.
+
 ## 0.2.1
 
 - Downloads and updates through the IPBES Literature Report website.
