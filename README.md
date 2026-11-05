@@ -31,7 +31,7 @@ the wrong field, …) and want to offer one-click fixes without risking the data
 3. Settings → Safe Edit: check the limits and allowed fields, add an application
    and copy its token into the application.
 
-Requires Zotero 10.0.x.
+Requires Zotero 10 (10.0 or newer 10.x).
 
 ## For application developers
 
