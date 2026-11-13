@@ -16,6 +16,7 @@ var MODULES = [
   "log",
   "backup",
   "guards",
+  "sessions",
   "dialog",
   "edits",
   "api",

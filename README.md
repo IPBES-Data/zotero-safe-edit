@@ -14,7 +14,7 @@ the wrong field, …) and want to offer one-click fixes without risking the data
 | Local only | Zotero's local server only accepts requests from this computer and drops requests from web pages. |
 | Registered applications | Each application needs its own token (Settings → Safe Edit, or a registration request you confirm in Zotero). Tokens can be revoked. |
 | Auto-sync off | Editing is refused while automatic sync is on, so changes stay local until you sync by hand. |
-| Fresh backup | Editing is refused unless the group was backed up recently (default: 60 minutes). |
+| Fresh backup | Editing is refused unless the group was backed up recently (default: 60 minutes). A plugin may start an *edit session* instead (e.g. for one kind of fix): the backup is checked once, at its start, and is the restore point for all changes of the session, however long it takes. The session ends when the plugin ends it, the group is synced, or Zotero quits. |
 | Edits only | The plugin can only change fields of existing regular items. It cannot create, delete, trash or merge items, or change item types. |
 | Allowed fields | Only fields you allow in the settings can be changed (default: `DOI`), and only if the item type has that field. |
 | Expected old value | A change is only written if the field still has the value the application saw; checked when the dialog opens and again on approval. |
@@ -72,6 +72,12 @@ await safeEdit.log(groupID);
 await safeEdit.undo(groupID, entryIDs);
 await safeEdit.restore(groupID, snapshot);
 await safeEdit.backup(groupID);
+
+// edit session: the backup is checked once, here, not with every batch
+var s = await safeEdit.beginSession(groupID); // {status: "started", session_id, backup} or {status: "refused", reasons}
+await safeEdit.preview(changes, { session: s.session_id });
+await safeEdit.apply(changes, "edit", { session: s.session_id });
+await safeEdit.endSession(s.session_id);
 ```
 
 The first `connect` asks the user whether the plugin may propose edits; the

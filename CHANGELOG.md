@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.0
+
+- Edit sessions for plugins (`beginSession`, `endSession`; `preview` and
+  `apply` take `{session}`): the backup is checked once, when the session
+  starts, not with every batch, so a long session is no longer refused because
+  its backup got older than the limit. The session ends when the plugin ends
+  it, the group is synced (the backup then no longer matches the library) or
+  Zotero quits. All other checks still apply to every batch; log entries name
+  their session (`session_id`). Plugins and applications which do not use
+  sessions work as before.
+
 ## 0.2.2
 
 - Works with all Zotero 10 releases (10.0 or newer 10.x), not only 10.0.x:

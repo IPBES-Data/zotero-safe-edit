@@ -38,9 +38,10 @@ SafeEdit.edits = {
     };
   },
 
-  // preview: checks and diffs, nothing is written
-  async preview(changes) {
-    var blockers = await SafeEdit.guards.batch(changes);
+  // preview: checks and diffs, nothing is written; `session` and `client`:
+  // see SafeEdit.sessions
+  async preview(changes, { client = null, session = null } = {}) {
+    var blockers = await SafeEdit.guards.batch(changes, { client, session });
     var rows = await this._rows(changes || []);
     return { blockers, rows: rows.map((r) => this._public(r)) };
   },
@@ -86,7 +87,7 @@ SafeEdit.edits = {
     };
   },
 
-  _entry(r, { batchID, client, action, scrolled, lineBatch, status, reason }) {
+  _entry(r, { batchID, client, action, scrolled, lineBatch, session, status, reason }) {
     var c = r.change;
     return {
       type: "entry",
@@ -108,13 +109,14 @@ SafeEdit.edits = {
       reason: reason || null,
       scrolled_to_end: scrolled,
       line_batch: !!lineBatch,
+      session_id: session || null,
       plugin_version: SafeEdit.version,
       zotero_version: Zotero.version,
     };
   },
 
-  async apply(changes, { client, action }) {
-    var blockers = await SafeEdit.guards.batch(changes);
+  async apply(changes, { client, action, session = null }) {
+    var blockers = await SafeEdit.guards.batch(changes, { client, session });
     if (blockers.length) {
       return { status: "refused", reasons: blockers };
     }
@@ -135,7 +137,7 @@ SafeEdit.edits = {
 
     var approved = new Set(decision.approved);
     var scrolled = !!decision.scrolled_to_end;
-    var meta = { batchID, client, action, scrolled, lineBatch };
+    var meta = { batchID, client, action, scrolled, lineBatch, session };
     var results = [];
     var progress = lineBatch ? SafeEdit.dialog.progress(approved.size) : null;
     var written = 0;
