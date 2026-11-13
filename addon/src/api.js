@@ -6,6 +6,9 @@
 //   var safeEdit = await Zotero.SafeEdit.api.connect({ pluginID, name });
 //   await safeEdit.preview(changes);
 //
+// An edit session (beginSession) checks the backup once, at its start; its ID
+// is passed to preview and apply (see SafeEdit.sessions).
+//
 // The user is asked once whether the plugin may propose edits; the plugin is
 // then listed (and can be revoked) in Settings → Safe Edit.
 SafeEdit.api = {
@@ -32,12 +35,14 @@ SafeEdit.api = {
     return {
       status: (groupIDs) => E.status(client(), groupIDs),
       backup: (groupID) => (client(), SafeEdit.backup.create(groupID)),
-      preview: (changes) => (client(), E.preview(changes)),
+      beginSession: (groupID) => SafeEdit.sessions.begin(client(), groupID),
+      endSession: (sessionID) => SafeEdit.sessions.end(client(), sessionID),
+      preview: (changes, { session = null } = {}) => E.preview(changes, { client: client(), session }),
       // only the plugin's own undo may link changes to log entries
-      apply: (changes, action = "edit") =>
+      apply: (changes, action = "edit", { session = null } = {}) =>
         E.apply(
           (changes || []).map(({ undo_of, ...c }) => c),
-          { client: client(), action: action === "restore" ? "restore" : "edit" }
+          { client: client(), action: action === "restore" ? "restore" : "edit", session }
         ),
       log: (groupID) => (client(), E.history(groupID)),
       undo: (groupID, entryIDs) => E.undo(groupID, entryIDs, client()),

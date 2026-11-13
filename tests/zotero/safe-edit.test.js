@@ -216,6 +216,11 @@ test("direct interface: asks once, works, refuses after revoking", async () => {
       assert.equal(r.results[0].status, "applied", "applied");
       var log = await api.log(GROUP_ID);
       assert.equal(log.find((e) => e.item_key === item.key).client, "Test plugin", "logged with the plugin's name");
+      var ses = await api.beginSession(GROUP_ID);
+      assert.equal(ses.status, "started", "session through the direct interface");
+      var r2 = await api.apply([change(item, "DOI", "10.1/api", "10.1/api-session")], "edit", { session: ses.session_id });
+      assert.equal(r2.results[0].status, "applied", "applied in the session");
+      assert.equal((await api.endSession(ses.session_id)).ended, true, "session ended");
     } finally {
       restore();
     }
@@ -239,5 +244,57 @@ test("direct interface: asks once, works, refuses after revoking", async () => {
     assert.ok(denied, "denied by the user");
   } finally {
     S.clients._confirm = original;
+  }
+});
+
+test("edit session: the backup is checked once, at its start", async () => {
+  var me = { id: "session-client", name: "Session tests" };
+  var other = { id: "other-client", name: "Other" };
+  var original = S.backup.ageMinutes;
+  var old = () => (S.backup.ageMinutes = async () => 999);
+  var restore = stubDialog();
+  try {
+    old();
+    var refused = await S.sessions.begin(me, GROUP_ID);
+    assert.equal(refused.status, "refused", "not started with an old backup");
+    assert.match(refused.reasons.join(" "), /backup/i, "reason");
+
+    S.backup.ageMinutes = original;
+    await freshBackup();
+    var s = await S.sessions.begin(me, GROUP_ID);
+    assert.equal(s.status, "started", "started with a fresh backup");
+
+    old(); // the backup gets older than the limit during the session
+    var item = await newItem({ DOI: "" });
+    var c = [change(item, "DOI", "", "10.1/session")];
+    var without = await S.edits.apply(c, { client: me, action: "edit" });
+    assert.equal(without.status, "refused", "refused without the session");
+    var pv = await S.edits.preview(c, { client: me, session: s.session_id });
+    assert.equal(pv.blockers.length, 0, "no blockers in the session");
+    var foreign = await S.edits.apply(c, { client: other, action: "edit", session: s.session_id });
+    assert.equal(foreign.status, "refused", "another client cannot use the session");
+
+    var r = await S.edits.apply(c, { client: me, action: "edit", session: s.session_id });
+    assert.equal(r.results[0].status, "applied", "applied in the session");
+    var log = await S.edits.history(GROUP_ID);
+    assert.equal(log.find((e) => e.item_key === item.key).session_id, s.session_id, "logged with the session");
+
+    // a sync ends the session: the backup no longer matches the library
+    await Zotero.Promise.delay(5);
+    Zotero.Libraries.get(group.libraryID).updateLastSyncTime();
+    var c2 = [change(item, "DOI", "10.1/session", "10.1/after-sync")];
+    var synced = await S.edits.apply(c2, { client: me, action: "edit", session: s.session_id });
+    assert.equal(synced.status, "refused", "refused after a sync");
+
+    S.backup.ageMinutes = original;
+    var s2 = await S.sessions.begin(me, GROUP_ID);
+    assert.equal(S.sessions.end(other, s2.session_id).ended, false, "only the client ends its session");
+    assert.equal(S.sessions.end(me, s2.session_id).ended, true, "ended");
+    old();
+    var ended = await S.edits.apply(c2, { client: me, action: "edit", session: s2.session_id });
+    assert.equal(ended.status, "refused", "refused after the end");
+  } finally {
+    S.backup.ageMinutes = original;
+    restore();
   }
 });

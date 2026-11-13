@@ -55,8 +55,9 @@ SafeEdit.guards = {
     return !!Zotero.Prefs.get("sync.autoSync");
   },
 
-  // reasons why a batch of changes must not be written at all
-  async batch(changes) {
+  // reasons why a batch of changes must not be written at all; groups of an
+  // edit session of the client (SafeEdit.sessions) skip the backup check
+  async batch(changes, { client = null, session = null } = {}) {
     var reasons = [];
     if (!Array.isArray(changes) || !changes.length) {
       reasons.push("No changes given");
@@ -83,17 +84,27 @@ SafeEdit.guards = {
       if (!libraryID) {
         continue; // reported per change
       }
-      var age = await SafeEdit.backup.ageMinutes(libraryID);
-      if (age === null) {
-        reasons.push(`No backup of group ${SafeEdit.util.groupName(groupID)} — make one first`);
-      } else if (age > this.maxBackupAgeMinutes()) {
-        reasons.push(
-          `Last backup of group ${SafeEdit.util.groupName(groupID)} is ` +
-            `${Math.round(age)} minutes old (at most ${this.maxBackupAgeMinutes()}) — make a new one`
-        );
+      if (SafeEdit.sessions.covers(session, client, groupID)) {
+        continue;
       }
+      reasons.push(...(await this.backupReasons(groupID, libraryID)));
     }
     return reasons;
+  },
+
+  // no backup of the group, or too old
+  async backupReasons(groupID, libraryID) {
+    var age = await SafeEdit.backup.ageMinutes(libraryID);
+    if (age === null) {
+      return [`No backup of group ${SafeEdit.util.groupName(groupID)} — make one first`];
+    }
+    if (age > this.maxBackupAgeMinutes()) {
+      return [
+        `Last backup of group ${SafeEdit.util.groupName(groupID)} is ` +
+          `${Math.round(age)} minutes old (at most ${this.maxBackupAgeMinutes()}) — make a new one`,
+      ];
+    }
+    return [];
   },
 
   // checks of a single change; returns {ok, reason, item, libraryID, current}
